@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bold-header{
+    font-weight: bold;
+}
+
+img{
+    -webkit-user-drag: none;
+}
+  
+.scaleAndShake {
+    animation: scaleAndShake 3s ease-in-out infinite;
+}
+
+@keyframes scaleAndShake {
+    0% {
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.highlight-row {
+    background-color: rgba(255, 0, 0, 0.463);
+}
+
+.blink-background {
+    animation: blink 1.5s steps(1, end) 3 forwards;
+}
+
+@keyframes blink {
+    0%, 100% {
+        background-color: white;
+        opacity: 1;
+    }
+    50% {
+        background-color: #ffd5d5;
+        opacity: 0.7;
+    }
+}
