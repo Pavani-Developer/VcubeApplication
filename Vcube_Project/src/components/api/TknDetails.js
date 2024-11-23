@@ -1,6 +1,5 @@
 import { decryptData } from "./cryptoUtils";
-//TknDetails.js
-//TknDetails.js
+
 export const userTknDetails = () => {
     const decryptTkn = localStorage.getItem('encrypted_User_Token');
     if (decryptTkn){
