@@ -151,6 +151,7 @@ class NewUserCreate(APIView):
     def post(self, request):
         request_data = request.data.copy()
         request_data['Password'] = make_password(request_data.get('Password'))
+        print(request_data['Password'])
         serializer = LoginDataSerializer(data=request_data)
         if serializer.is_valid():
             serializer.save()
