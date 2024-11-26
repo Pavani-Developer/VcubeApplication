@@ -173,7 +173,7 @@ const Dashboard = () => {
       removeUserLoginData();
       userGoogleLogout();
       userAuthChk();
-      navigate('/vcube/login');
+      navigate('/');
     }, 500);
   }; 
 

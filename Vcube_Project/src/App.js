@@ -47,7 +47,7 @@ const App = () => {
         <StudentAuthProvider>
           <Router>
             <Routes>
-              <Route path="/vcube/login" element={
+              <Route path="/" element={
                 <LoginRoute>
                   <StudentLoginRoute>
                     <LoginPage />
