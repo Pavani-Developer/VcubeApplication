@@ -55,9 +55,12 @@ const StudentForm = ({ isStudentLogin, setStudentLogin, setIsLoading, handleShow
     startTransition(async () => {
     try {
       const res = await checkStudentDetails(state.mobile, state.course);
+      console.log(res);
       if (res.status) {
         stdGoogleLogout();
+
         const google = await stdGoogleLogin(res.Email);
+        console.log(google);
         if (google.status === 'success' && google.verified) {
           setField('stdEmail', google.email);
           stdAuthenticateOTP(google.email);

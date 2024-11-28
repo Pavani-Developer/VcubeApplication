@@ -52,11 +52,13 @@ export const UserGoogleProvider = ({ children }) => {
             return { status: 'success', email: user.email, verified: user.emailVerified};
 
         } else {
+          
             stdGoogleLogout();
             await deleteUser(user);
             return { status: 'failed', message: 'Email does not match' };
         }
     } catch(error){
+        console.error('error',error);
         stdGoogleLogout();
         return { status: 'failed', message: 'Login failed' };
     }
