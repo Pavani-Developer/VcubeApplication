@@ -106,6 +106,7 @@ const StudentForm = ({ isStudentLogin, setStudentLogin, setIsLoading, handleShow
         setIsLoading(true);
         const uniqueURL = sessionStorage.getItem('UniqueURL');
         await stdLogin();
+        console.log(uniqueURL);
         navigate(`/vcube/student-info/${uniqueURL.substring(60,90)}`);
         setIsLoading(false);
       } else {
