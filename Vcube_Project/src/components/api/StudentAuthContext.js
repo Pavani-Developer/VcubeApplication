@@ -33,27 +33,38 @@ export const StudentAuthProvider = ({ children }) => {
     };
 
     const studentAuthChk = async () => {
-
+        console.log('Running studentAuthChk...');
+        console.log('Student ID:', student);
+        console.log('User Type:', is_User());
+        console.log('Login State:', isStdLogin());
+        console.log('Date:', dateTime[0]);
+    
         startTransition(async () => {
-        if (student && is_User() === 'Student' &&
-            isStdLogin() === (`True -> ${student} -> ${dateTime[0]}`) &&
-            await checkStdAuth() === true
-        ) {
-            const unsubscribe = onAuthStateChanged(stdAuth, (g_user) => {
-                if (g_user) {
-                    stdLogin();
-                } else {
-                    stdLogout();
-                }
-            });
-
-            return () => unsubscribe();
-        } else {
-            stdLogout();
-        }
-        })
+            if (
+                student && 
+                is_User() === 'Student' &&
+                isStdLogin() === (`True -> ${student} -> ${dateTime[0]}`) &&
+                await checkStdAuth() === true
+            ) {
+                const unsubscribe = onAuthStateChanged(stdAuth, (g_user) => {
+                    if (g_user) {
+                        console.log('Google User Found:', g_user);
+                        stdLogin();
+                    } else {
+                        console.log('Google User Not Found.');
+                        stdLogout();
+                    }
+                });
+    
+                return () => unsubscribe();
+            } else {
+                console.log('Authentication Check Failed.');
+                stdLogout();
+            }
+        });
         setIsLoading(false);
     };
+    
 
     useEffect(() => {
         studentAuthChk();
