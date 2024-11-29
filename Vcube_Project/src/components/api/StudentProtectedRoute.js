@@ -13,8 +13,10 @@ export const StudentProtectedRoute = ({ children }) => {
     }
 
     if (isStudentAuthenticated || isUserAuthenticated || isPlacementsAuthenticated) {
+        
         return children;
     } else {
+        
         return <Navigate to="/vcube/login" />;
     }
 };
@@ -28,8 +30,10 @@ export const StudentLoginRoute = ({ children }) => {
     }
 
     if (!isStudentAuthenticated) {
+        console.log('student is not authenticated');
         return children;
     } else {
+        console.log('student is authenticated');
         return <Navigate to={`/vcube/student-info/${uniqueURL.substring(60,90)}`} />;
     }
 };
