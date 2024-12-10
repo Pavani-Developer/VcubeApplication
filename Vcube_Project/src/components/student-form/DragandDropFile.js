@@ -4,6 +4,10 @@ import { Box, Typography, Button, CircularProgress, Dialog, DialogTitle, DialogC
 import { CloudUploadOutlined, ArrowForward, TouchAppRounded, CheckCircleRounded, LoginRounded, DeleteForever, CloseRounded } from '@mui/icons-material';
 import { StudentsContext } from '../api/students';
 import { BatchContext } from '../api/batch';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 
 const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManually, handleShowSnackbar, setIsLoading, loading, selectedCourse, selectedBatch, isUser, handleClose, refreshData }) => {
   const { fetchStudentsData, postBulkStudentData, deleteBulkStudentData } = useContext(StudentsContext);
@@ -15,6 +19,9 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
   const [existData, setExistData] = useState([]);
   const [stdExists, setStdExists] = useState(false);
   const [filterData, setFilterData] = useState([]);
+  const [joiningDate, setJoiningDate] = useState(null);
+
+  
   
   useEffect(()=>{
     setIsFileError(fileError);
@@ -87,9 +94,9 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
                     Phone: std_Data.Phone,
                     Course: selectedCourse,
                     BatchName: selectedBatch,
-                    Joining_Date: std_Data.JoiningDate,
+                    Joining_Date:joiningDate,
                     Personal_Info: JSON.stringify({
-                        Joining_Date: std_Data.JoiningDate,
+                        Joining_Date:joiningDate,
                         Image : std_Data.Gender === 'Male' ? '/images/Empty-Men-Icon.png' : '/images/Empty-Women-Icon.png',
                         Course: selectedCourse,
                         Name: std_Data.Name,
@@ -213,6 +220,22 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
       </Box>
       {(fileName && !fileError) ? (<Typography sx={{marginTop : '10px'}}><strong>Selected file: </strong> {fileName}</Typography>) : (isFileError) ? <Typography sx={{color : 'red', marginTop : '10px'}}>Upload a Valid File.</Typography> : null}
     </Box>
+
+
+    {/* I want to create a date picker instead of sending joining date in excel i want it to be dynamic like from date picker  */}
+    {/* Hey jarvis complete this task */}
+    <Box className="w-1/3 mt-10">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Select Joining Date"
+            value={joiningDate}
+            onChange={(newValue) => setJoiningDate(newValue)}
+            renderInput={(params) => <Button {...params} />}
+          />
+        </LocalizationProvider>
+      </Box>
+
+
     <Box className="flex w-1/3 h-10 items-center justify-around mt-10 mb-10">
     {isUser !== 'Super Admin' && <Button variant='outlined' endIcon={<ArrowForward />} onClick={()=>setUploadManually(true)}>Upload Manually</Button>}
     <Button variant='contained' startIcon={<LoginRounded sx={{transform : 'rotate(90deg)'}} />}
