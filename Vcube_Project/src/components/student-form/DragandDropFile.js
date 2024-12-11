@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Box, Typography, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton,TextField  } from '@mui/material';
 import { CloudUploadOutlined, ArrowForward, TouchAppRounded, CheckCircleRounded, LoginRounded, DeleteForever, CloseRounded } from '@mui/icons-material';
 import { StudentsContext } from '../api/students';
 import { BatchContext } from '../api/batch';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 
 
 const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManually, handleShowSnackbar, setIsLoading, loading, selectedCourse, selectedBatch, isUser, handleClose, refreshData }) => {
@@ -59,10 +61,16 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
       setIsLoading(false);
     }
   };
+  const handleDateChange = (newValue) => {
+    const formattedDate = dayjs(newValue).format('DD-MMM-YYYY');
+    setJoiningDate(formattedDate);
+  };
 
   const checkData = async(data) => {
     const found = await fileData && fileData.every((stdData) => {
+      console.log(stdData);
       return data && data.some(batchData => stdData.BatchName === batchData.BatchName);
+
     });
     if(!found){
       handleShowSnackbar('error','Batch not found. Please add a batch before adding the student.');
@@ -82,6 +90,7 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
       const existedData = [];
       await data && (async () => {
         for (const std_Data of data) {
+            console.log(std_Data);
             const stdFound = fetchData && fetchData.some(stdData => 
                 parseInt(JSON.parse(stdData.Personal_Info).Phone) === std_Data.Phone || 
                 JSON.parse(stdData.Personal_Info).Email === std_Data.Email
@@ -223,24 +232,47 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
 
 
     {/* I want to create a date picker instead of sending joining date in excel i want it to be dynamic like from date picker  */}
-    {/* Hey jarvis complete this task */}
-    <Box className="w-1/3 mt-10">
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Select Joining Date"
-            value={joiningDate}
-            onChange={(newValue) => setJoiningDate(newValue)}
-            renderInput={(params) => <Button {...params} />}
-          />
-        </LocalizationProvider>
-      </Box>
+    
+    {/* <Box className="flex justify-center items-center">
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Select Joining Date"
+          value={joiningDate ? dayjs(joiningDate, 'DD-MMM-YYYY') : null}
+          onChange={handleDateChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+    </Box> */}
 
 
     <Box className="flex w-1/3 h-10 items-center justify-around mt-10 mb-10">
     {isUser !== 'Super Admin' && <Button variant='outlined' endIcon={<ArrowForward />} onClick={()=>setUploadManually(true)}>Upload Manually</Button>}
-    <Button variant='contained' startIcon={<LoginRounded sx={{transform : 'rotate(90deg)'}} />}
-       onClick={handleSubmit} sx={{width : (isUser === 'Super Admin' || isUser === 'Admin') ? '100%' : '50%', height : (isUser === 'Super Admin' || isUser === 'Admin') ? '100%' : '90%'}}>Import Data
-    </Button>
+    <Box className="flex justify-center items-center space-x-4">
+  {/* Button Section (Left) */}
+  <Button 
+    variant="contained" 
+    startIcon={<LoginRounded sx={{ transform: 'rotate(90deg)' }} />}
+    onClick={handleSubmit} 
+    sx={{ 
+      width: (isUser === 'Super Admin' || isUser === 'Admin') ? '100%' : '50%', 
+      height: (isUser === 'Super Admin' || isUser === 'Admin') ? '100%' : '90%' 
+    }}
+  >
+    Import Data
+  </Button>
+
+  {/* DatePicker Section (Right) */}
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <DatePicker
+      label="Select Joining Date"
+      value={joiningDate ? dayjs(joiningDate, 'DD-MMM-YYYY') : null}
+      onChange={handleDateChange}
+      renderInput={(params) => <TextField {...params} />}
+    />
+  </LocalizationProvider>
+</Box>
+
+
     </Box>
     {(isUser === 'Super Admin' || isUser === 'Admin') &&
      <Box className='w-1/2 h-12 mt-10 flex items-center justify-evenly'>
