@@ -136,6 +136,7 @@ const StudentInfo = () => {
         return;
       }
       const batchResult = await fetchBatchAttendanceDataByCourse(res[0].Course);
+      console.log(res[0]);
       setStudentData({
         personal: JSON.parse(res[0].Personal_Info),
         education: typeof res[0].Educational_Info === 'object' ? 'N/A' : JSON.parse(res[0].Educational_Info),
