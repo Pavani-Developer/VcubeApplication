@@ -106,7 +106,7 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
                     Joining_Date:joiningDate,
                     Personal_Info: JSON.stringify({
                         Joining_Date:joiningDate,
-                        Image :  'Male' ? '/images/Empty-Men-Icon.png' : '/images/Empty-Women-Icon.png',
+                        Image : '/images/demo-profile.jpg' ,
                         Course: selectedCourse,
                         Name: std_Data.Name,
                         BatchName: selectedBatch,
