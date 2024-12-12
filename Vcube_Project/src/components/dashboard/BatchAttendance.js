@@ -15,21 +15,58 @@ const BatchAttendance = ({ isOpen, setIsOpen, selectedCourse, type, handleShowSn
     const studentCount = Array.isArray(studentsData) ? studentsData.filter((data)=> data.Course === selectedCourse && (data.BatchName === select_Batch || select_Batch === 'All')).length : 0;
     const dateTime = DateTime().split(' ');
 
+    // const fetchData = async () => {
+    //     const res = await fetchBatchData(selectedCourse);
+    //     const result = await fetchBatchAttendanceDataByCourse(selectedCourse);
+    //     if((res && res.message)){
+    //         handleShowSnackbar('error',res.message);
+    //         handleClose();
+    //     }else if(res && res.length > 0){
+    //         setBatchData(res);
+    //         if(result)setBatchAttendanceData(result);
+    //     }else if(res && res.length === 0){
+    //         handleShowSnackbar('info','No Data Found.');
+    //         handleClose();
+    //     }
+    // };
+
+    const [loading, setLoading] = useState(true); // New loading state
+    const [error, setError] = useState(null); // Tracks any errors that occur
+
+
     const fetchData = async () => {
-        const res = await fetchBatchData(selectedCourse);
-        const result = await fetchBatchAttendanceDataByCourse(selectedCourse);
-        if((res && res.message)){
-            handleShowSnackbar('error',res.message);
-            handleClose();
-        }else if(res && res.length > 0){
-            setBatchData(res);
-            if(result)setBatchAttendanceData(result);
-        }else if(res && res.length === 0){
-            handleShowSnackbar('info','No Data Found.');
-            handleClose();
+        try {
+            setLoading(true); // Start loading before fetching data
+            
+            // Use Promise.all to fetch data concurrently
+            const [res, result] = await Promise.all([
+                fetchBatchData(selectedCourse),
+                fetchBatchAttendanceDataByCourse(selectedCourse)
+            ]);
+
+            if (!res) {
+                throw new Error('Failed to fetch batch data.');
+            }
+
+            if (res.message) {
+                throw new Error(res.message);
+            }
+
+            if (Array.isArray(res) && res.length > 0) {
+                setBatchData(res); // Store batch data
+                if (result) setBatchAttendanceData(result); // Store attendance data
+            } else if (Array.isArray(res) && res.length === 0) {
+                setBatchData([]); // No data found, store empty array
+            }
+        } catch (error) {
+            setError(error.message || 'Something went wrong.');
+            console.error('Fetch error:', error);
+        } finally {
+            setLoading(false); // End loading after data has been fetched
         }
     };
-
+    
+    
     useEffect(()=>{
         selectedCourse && fetchData();
     },[isOpen])
