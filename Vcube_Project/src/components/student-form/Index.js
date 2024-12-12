@@ -65,7 +65,7 @@ const StudentForm = ({ open, setOpen, selectedCourse, selectedBatch, isUser, ref
         if(isLoading){
             setTimeout(()=>{
                 setIsLoading(false);
-            },3000)
+            },5000)
         }
     },[isLoading])
 
