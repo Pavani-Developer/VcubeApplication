@@ -106,13 +106,13 @@ const DragAndDropList = ({ onDrop, fileData, fileName, fileError, setUploadManua
                     Joining_Date:joiningDate,
                     Personal_Info: JSON.stringify({
                         Joining_Date:joiningDate,
-                        Image : std_Data.Gender === 'Male' ? '/images/Empty-Men-Icon.png' : '/images/Empty-Women-Icon.png',
+                        Image :  'Male' ? '/images/Empty-Men-Icon.png' : '/images/Empty-Women-Icon.png',
                         Course: selectedCourse,
                         Name: std_Data.Name,
                         BatchName: selectedBatch,
                         Email: std_Data.Email,
                         Phone: std_Data.Phone,
-                        Gender: std_Data.Gender
+                        Gender: ''
                     })
                 };
                 studentData.push(sendData);
